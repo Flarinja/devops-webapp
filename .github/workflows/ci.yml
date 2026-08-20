@@ -28,7 +28,28 @@ jobs:
         run: npm test
 
       - name: Upload build output
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
+
+      - name: Send Slack success notification
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            --data '{"text":"SUCCESS: CI pipeline passed for devops-webapp on commit ${{ github.sha }}"}' \
+            "$SLACK_WEBHOOK_URL"
+
+      - name: Send Slack failure notification
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            --data '{"text":"FAILURE: CI pipeline failed for devops-webapp on commit ${{ github.sha }}"}' \
+            "$SLACK_WEBHOOK_URL"
