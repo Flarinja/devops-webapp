@@ -1,0 +1,10 @@
+{
+  "name": "devops-webapp",
+  "version": "1.0.0",
+  "description": "A simple web application demonstrating CI/CD, ChatOps and static deployment",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node test.mjs"
+  }
+}
